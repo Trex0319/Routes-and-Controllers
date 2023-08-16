@@ -33,7 +33,8 @@ app.get("/books", (req, res) => {
 app.get("/books/:id", (req, res) => {
   const book = books.find((p) => parseInt(p.id) === parseInt(req.params.id));
   if (book) {
-    res.status(200).json(book);
+    const author = authors.find((author) => author.id === book.authorId);
+    res.status(200).json({ ...book, name: author.name, bio: author.bio });
   } else {
     res.status(400).json("ID provided is not available");
   }
@@ -48,7 +49,8 @@ app.get("/reviews/:id", (req, res) => {
     (p) => parseInt(p.id) === parseInt(req.params.id)
   );
   if (review) {
-    res.status(200).json(review);
+    const book = books.find((b) => b.id === review.bookId);
+    res.status(200).json({ ...review, book_title: book.title });
   } else {
     res.status(400).json("ID provided is not available");
   }
